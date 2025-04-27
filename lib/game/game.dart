@@ -1,15 +1,12 @@
 import 'package:flame/game.dart';
-import 'package:fluttermelon/game/language.dart';
+import 'package:fluttermelon/game/lang_balls/flutter_ball.dart';
 
 class FluttermelonGame extends FlameGame {
-  late Language fruit;
-
   @override
   Future<void> onLoad() async {
     super.onLoad();
 
-    print("Loading images...");
-
+    // Load images
     await images.loadAll([
       "Assembly.png",
       "C#.png",
@@ -21,7 +18,6 @@ class FluttermelonGame extends FlameGame {
       "Rust.png"
     ]);
 
-    fruit = Language();
-    add(fruit);
+    add(FlutterBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
   }
 }
