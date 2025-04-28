@@ -1,5 +1,14 @@
+import 'dart:async';
+import 'package:flame/components.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball.dart';
 
 class GoBall extends Langball {
-  GoBall({required super.startPos}) : super(spriteName: "Go.png", ballSize: 20);
+  GoBall({required super.startPos}) : super(ballSize: 140);
+
+  @override
+  FutureOr<void> onLoad() {
+    sprite = Sprite(game.images.fromCache("Go.png"));
+
+    return super.onLoad();
+  }
 }

@@ -1,6 +1,14 @@
+import 'dart:async';
+import 'package:flame/components.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball.dart';
 
 class CppBall extends Langball {
-  CppBall({required super.startPos})
-      : super(spriteName: "C++.png", ballSize: 10);
+  CppBall({required super.startPos}) : super(ballSize: 80);
+
+  @override
+  FutureOr<void> onLoad() {
+    sprite = Sprite(game.images.fromCache("C++.png"));
+
+    return super.onLoad();
+  }
 }
