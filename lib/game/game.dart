@@ -23,12 +23,12 @@ class FluttermelonGame extends FlameGame {
       "Rust.png",
     ]);
 
-    // add(FlutterBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
+    add(FlutterBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
     // add(JavascriptBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
     // add(CSharpBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
-    // add(GoBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
+    add(GoBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
     // add(RustBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
     // add(CppBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
-    add(AssemblyBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
+    // add(AssemblyBall(startPos: Vector2(canvasSize.x / 2, canvasSize.y / 2)));
   }
 }
