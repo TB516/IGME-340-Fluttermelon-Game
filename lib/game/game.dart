@@ -66,7 +66,13 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   void update(double dt) {
     for (int i = 0; i < balls.length; ++i) {
       for (int j = i + 1; j < balls.length; ++j) {
-        balls[i].resolveCollision(balls[j]);
+        bool colliding = balls[i].isColliding(balls[j]);
+
+        if (colliding && balls[i].runtimeType == balls[j].runtimeType) {
+          print("Combine langballs!");
+        } else if (colliding) {
+          balls[i].resolveCollision(balls[j]);
+        }
       }
     }
 
@@ -75,12 +81,12 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
-    spawnBall(event.canvasPosition);
+    spawnRandomBall(event.canvasPosition);
 
     super.onTapDown(event);
   }
 
-  void spawnBall(Vector2 pos) {
+  void spawnRandomBall(Vector2 pos) {
     Langball ball = upcomingBallFunctions.removeFirst()(pos);
 
     balls.add(ball);
