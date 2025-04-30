@@ -6,11 +6,13 @@ final Vector2 gravity = Vector2(0, 100);
 abstract class Langball extends SpriteComponent
     with HasGameReference<FluttermelonGame>, HasCollisionDetection {
   Vector2 velocity = Vector2(0, 0);
+  double radius = 0;
 
   Langball({required Vector2 startPos, required double diameter}) {
     position = startPos;
 
     size = Vector2(diameter, diameter);
+    radius = diameter / 2;
     anchor = Anchor.center;
   }
 
@@ -22,8 +24,8 @@ abstract class Langball extends SpriteComponent
 
     position += velocity * dt;
 
-    if (position.y + size.y / 2 > game.size.y) {
-      position.y = game.size.y - size.y / 2;
+    if (position.y + radius > game.size.y) {
+      position.y = game.size.y - radius;
       velocity.y = 0;
     }
   }
