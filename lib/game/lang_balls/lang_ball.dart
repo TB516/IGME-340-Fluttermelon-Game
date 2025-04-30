@@ -40,29 +40,25 @@ abstract class Langball extends SpriteComponent
     final double distance = delta.length;
     final double minDistance = radius + other.radius;
 
-    if (distance < minDistance) {
-      final double overlap = minDistance - distance;
-      final Vector2 correction = delta.normalized() * (overlap / 2);
+    final double overlap = minDistance - distance;
+    final Vector2 correction = delta.normalized() * (overlap / 2);
 
-      // Separate the balls to resolve overlap
-      position += correction;
-      other.position -= correction;
+    // Separate the balls to resolve overlap
+    position += correction;
+    other.position -= correction;
 
-      // Calculate new velocities after collision
-      final Vector2 normal = delta.normalized();
-      final Vector2 relativeVelocity = velocity - other.velocity;
-      final double velocityAlongNormal = relativeVelocity.dot(normal);
+    // Calculate new velocities after collision
+    final Vector2 normal = delta.normalized();
+    final Vector2 relativeVelocity = velocity - other.velocity;
+    final double velocityAlongNormal = relativeVelocity.dot(normal);
 
-      if (velocityAlongNormal < 0) {
-        final double restitution =
-            0.8; // Coefficient of restitution (bounciness)
-        final double impulseMagnitude =
-            -(1 + restitution) * velocityAlongNormal;
+    if (velocityAlongNormal < 0) {
+      final double restitution = 0.8; // Coefficient of restitution (bounciness)
+      final double impulseMagnitude = -(1 + restitution) * velocityAlongNormal;
 
-        final Vector2 impulse = normal * impulseMagnitude;
-        velocity += impulse;
-        other.velocity -= impulse;
-      }
+      final Vector2 impulse = normal * impulseMagnitude;
+      velocity += impulse;
+      other.velocity -= impulse;
     }
   }
 }
