@@ -7,7 +7,7 @@ class JavascriptBall extends Langball {
 
   @override
   FutureOr<void> onLoad() {
-    sprite = Sprite(game.images.fromCache("JavaScript.webp"));
+    sprite = Sprite(game.images.fromCache("Javascript.png"));
 
     return super.onLoad();
   }
