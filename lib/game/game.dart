@@ -81,12 +81,12 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
-    spawnRandomBall(Vector2(event.canvasPosition.x, 50));
+    spawnNextBall(Vector2(event.canvasPosition.x, 50));
 
     super.onTapDown(event);
   }
 
-  void spawnRandomBall(Vector2 pos) {
+  void spawnNextBall(Vector2 pos) {
     Langball ball = upcomingBallFunctions.removeFirst()(pos);
 
     balls.add(ball);
