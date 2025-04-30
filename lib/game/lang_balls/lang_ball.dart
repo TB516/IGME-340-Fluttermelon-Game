@@ -30,6 +30,11 @@ abstract class Langball extends SpriteComponent
     }
   }
 
+  bool isColliding(Langball other) {
+    final double distance = (position - other.position).length;
+    return distance < (radius + other.radius);
+  }
+
   void resolveCollision(Langball other) {
     final Vector2 delta = position - other.position;
     final double distance = delta.length;
