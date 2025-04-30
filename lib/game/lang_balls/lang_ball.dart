@@ -28,6 +28,14 @@ abstract class Langball extends SpriteComponent
       position.y = game.size.y - radius;
       velocity.y = 0;
     }
+    if (position.x - radius < 0) {
+      position.x = 0 + radius;
+      velocity.x = 0;
+    }
+    if (position.x + radius > game.size.x) {
+      position.x = game.size.x - radius;
+      velocity.x = 0;
+    }
   }
 
   bool isColliding(Langball other) {
