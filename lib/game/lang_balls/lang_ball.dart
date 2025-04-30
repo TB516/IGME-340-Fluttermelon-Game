@@ -37,10 +37,8 @@ abstract class Langball extends SpriteComponent
 
   void resolveCollision(Langball other) {
     final Vector2 delta = position - other.position;
-    final double distance = delta.length;
-    final double minDistance = radius + other.radius;
 
-    final double overlap = minDistance - distance;
+    final double overlap = radius + other.radius - delta.length;
     final Vector2 correction = delta.normalized() * (overlap / 2);
 
     // Separate the balls to resolve overlap
