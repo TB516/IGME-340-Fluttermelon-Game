@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball.dart';
 
 class GoBall extends Langball {
-  GoBall({required super.startPos}) : super(diameter: 140);
+  GoBall({required super.startPos}) : super(diameter: 70);
 
   @override
   FutureOr<void> onLoad() {
