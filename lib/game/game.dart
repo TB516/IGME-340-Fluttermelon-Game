@@ -69,12 +69,15 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     ]);
 
     for (int i = 0; i < 5; i++) {
-      upcomingBallTypes.add(ballTypes[rng.nextInt(ballTypes.length)]);
+      upcomingBallTypes.add(ballTypes[rng.nextInt(ballTypes.length - 2)]);
     }
   }
 
   @override
   void update(double dt) {
+    print(score);
+    print(upcomingBallTypes);
+
     manageCollisions();
 
     fusePairs();
@@ -97,7 +100,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     balls.add(ball);
     add(ball);
 
-    upcomingBallTypes.add(ballTypes[rng.nextInt(ballTypes.length)]);
+    upcomingBallTypes.add(ballTypes[rng.nextInt(ballTypes.length - 2)]);
   }
 
   void manageCollisions() {
