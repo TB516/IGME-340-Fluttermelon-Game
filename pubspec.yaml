@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flame: ^1.28.1
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
