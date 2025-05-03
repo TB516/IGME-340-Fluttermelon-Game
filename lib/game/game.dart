@@ -108,6 +108,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     super.onTapDown(event);
   }
 
+  /// Adds new preview ball to the screen and shifts all current previews over
   void addNewPreviewBall(int spriteIndex) {
     /// Move over all current previews
     int curNumPreviews = upcomingBallPreviews.length;
@@ -130,12 +131,14 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     add(preview);
   }
 
+  /// Increases the max number of previews and adds a new preview ball to the screen
   void increasePreviewCount() {
     curPreviewCount++;
 
     addNewPreviewBall(rng.nextInt(ballTypes.length - maxSpawnOffset));
   }
 
+  /// Dequeues the next preview and instantiates a new ball of the same type
   void spawnNextBall(Vector2 pos) {
     LangBallPreview nextBallPrev = upcomingBallPreviews.removeFirst();
     remove(nextBallPrev);
@@ -146,6 +149,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     add(ball);
   }
 
+  /// Check if any balls are considered falling and manage if dropping is allowed
   void movementCheck() {
     for (int i = 0; i < balls.length; ++i) {
       if (balls[i].isFalling()) {
@@ -157,6 +161,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     canDrop = true;
   }
 
+  /// Handle collisions between balls and mark ball pairs for fusion if needed
   void manageCollisions() {
     for (int i = 0; i < balls.length; ++i) {
       for (int j = i + 1; j < balls.length; ++j) {
@@ -175,6 +180,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     }
   }
 
+  /// Fuses a pair of balls into a higher level ball
   void fusePairs() {
     for (MapEntry<Langball, Langball> pair in fusionPairs.entries) {
       balls.remove(pair.key);
