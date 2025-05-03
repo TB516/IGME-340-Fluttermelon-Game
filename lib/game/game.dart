@@ -50,7 +50,8 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
   static const double previewSize = 25;
   static const double previewSpacer = 10;
-  int curPreviewCount = 5;
+  static const int maxPreviewCount = 5;
+  int curPreviewCount = 1;
   final Queue<LangBallPreview> upcomingBallPreviews = Queue();
 
   static const double dropHeight = 50;
@@ -136,6 +137,11 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     curPreviewCount++;
 
     addNewPreviewBall(rng.nextInt(ballTypes.length - maxSpawnOffset));
+  }
+
+  /// Checks if the current preview count can be increased
+  bool canIncreasePreviewCount() {
+    return curPreviewCount + 1 == maxPreviewCount;
   }
 
   /// Dequeues the next preview and instantiates a new ball of the same type
