@@ -109,7 +109,14 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   }
 
   void movementCheck() {
-    for (int i = 0; i < balls.length; ++i) {}
+    for (int i = 0; i < balls.length; ++i) {
+      if (balls[i].isFalling()) {
+        canDrop = false;
+        return;
+      }
+    }
+
+    canDrop = true;
   }
 
   void manageCollisions() {

@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flutter/gestures.dart';
 import 'package:fluttermelon/game/game.dart';
 
 final Vector2 gravity = Vector2(0, 100);
@@ -49,8 +50,9 @@ abstract class Langball extends SpriteComponent
     }
   }
 
-  bool isMoving() {
-    return _velocity != Vector2.zero();
+  bool isFalling() {
+    /// Offset value to account for collision resolution
+    return _velocity.y > 15;
   }
 
   double getScoreValue() {
