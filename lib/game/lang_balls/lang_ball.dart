@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flutter/gestures.dart';
 import 'package:fluttermelon/game/game.dart';
 
 final Vector2 gravity = Vector2(0, 100);

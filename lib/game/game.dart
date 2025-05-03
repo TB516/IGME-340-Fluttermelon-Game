@@ -9,6 +9,7 @@ import 'package:fluttermelon/game/lang_balls/flutter_ball.dart';
 import 'package:fluttermelon/game/lang_balls/go_ball.dart';
 import 'package:fluttermelon/game/lang_balls/javascript_ball.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball.dart';
+import 'package:fluttermelon/game/lang_balls/lang_ball_preview.dart';
 import 'package:fluttermelon/game/lang_balls/rust_ball.dart';
 
 class FluttermelonGame extends FlameGame with TapCallbacks {
@@ -47,10 +48,16 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     },
   };
 
-  final Queue<Type> upcomingBallTypes = Queue();
-  final Map<Langball, Langball> fusionPairs = {};
+  static const double previewSize = 25;
+  static const double previewSpacer = 10;
+  int curPreviewCount = 5;
+  final Queue<LangBallPreview> upcomingBallPreviews = Queue();
+
+  static const double dropHeight = 50;
+  static const int maxSpawnOffset = 2;
 
   final List<Langball> balls = [];
+  final Map<Langball, Langball> fusionPairs = {};
 
   double score = 0;
 
@@ -71,8 +78,8 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
       "Rust.png",
     ]);
 
-    for (int i = 0; i < 5; i++) {
-      upcomingBallTypes.add(ballTypes[rng.nextInt(ballTypes.length - 2)]);
+    for (int i = 0; i < curPreviewCount; i++) {
+      addNewPreviewBall(rng.nextInt(ballTypes.length - maxSpawnOffset));
     }
   }
 
@@ -92,20 +99,51 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     if (canDrop) {
-      spawnNextBall(Vector2(event.canvasPosition.x, 50));
+      spawnNextBall(Vector2(event.canvasPosition.x, dropHeight));
+
+      addNewPreviewBall(rng.nextInt(ballTypes.length - maxSpawnOffset));
       canDrop = false;
     }
 
     super.onTapDown(event);
   }
 
+  void addNewPreviewBall(int spriteIndex) {
+    /// Move over all current previews
+    int curNumPreviews = upcomingBallPreviews.length;
+
+    for (int i = 0; i < curNumPreviews; ++i) {
+      LangBallPreview prev = upcomingBallPreviews.removeFirst();
+
+      prev.position.x += previewSize + previewSpacer;
+
+      upcomingBallPreviews.add(prev);
+    }
+
+    /// Add in a new preview
+    Vector2 position = Vector2(0, previewSize / 2);
+
+    LangBallPreview preview = LangBallPreview(
+        type: ballTypes[spriteIndex], pos: position, diameter: previewSize);
+
+    upcomingBallPreviews.add(preview);
+    add(preview);
+  }
+
+  void increasePreviewCount() {
+    curPreviewCount++;
+
+    addNewPreviewBall(rng.nextInt(ballTypes.length - maxSpawnOffset));
+  }
+
   void spawnNextBall(Vector2 pos) {
-    Langball ball = ballSpawnMethods[upcomingBallTypes.removeFirst()]!(pos);
+    LangBallPreview nextBallPrev = upcomingBallPreviews.removeFirst();
+    remove(nextBallPrev);
+
+    Langball ball = ballSpawnMethods[nextBallPrev.getType()]!(pos);
 
     balls.add(ball);
     add(ball);
-
-    upcomingBallTypes.add(ballTypes[rng.nextInt(ballTypes.length - 2)]);
   }
 
   void movementCheck() {
