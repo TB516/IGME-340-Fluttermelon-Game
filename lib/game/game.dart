@@ -51,7 +51,10 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   final Map<Langball, Langball> fusionPairs = {};
 
   final List<Langball> balls = [];
+
   double score = 0;
+
+  bool canDrop = true;
 
   @override
   Future<void> onLoad() async {
@@ -75,8 +78,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
   @override
   void update(double dt) {
-    print(score);
-    print(upcomingBallTypes);
+    movementCheck();
 
     manageCollisions();
 
@@ -89,7 +91,10 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
-    spawnNextBall(Vector2(event.canvasPosition.x, 50));
+    if (canDrop) {
+      spawnNextBall(Vector2(event.canvasPosition.x, 50));
+      canDrop = false;
+    }
 
     super.onTapDown(event);
   }
@@ -101,6 +106,10 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     add(ball);
 
     upcomingBallTypes.add(ballTypes[rng.nextInt(ballTypes.length - 2)]);
+  }
+
+  void movementCheck() {
+    for (int i = 0; i < balls.length; ++i) {}
   }
 
   void manageCollisions() {
@@ -128,7 +137,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
       remove(pair.key);
       remove(pair.value);
 
-      score += pair.key.mass * 10;
+      score += pair.key.getScoreValue();
 
       int curTypeIndex = ballTypes.indexOf(pair.key.runtimeType);
 
