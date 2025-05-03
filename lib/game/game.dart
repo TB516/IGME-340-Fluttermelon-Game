@@ -13,9 +13,9 @@ import 'package:fluttermelon/game/lang_balls/lang_ball_preview.dart';
 import 'package:fluttermelon/game/lang_balls/rust_ball.dart';
 
 class FluttermelonGame extends FlameGame with TapCallbacks {
-  final Random rng = Random();
+  final Random _rng = Random();
 
-  final List<Type> ballTypes = [
+  final List<Type> _ballTypes = [
     AssemblyBall,
     CppBall,
     RustBall,
@@ -24,7 +24,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     JavascriptBall,
     FlutterBall
   ];
-  final Map<Type, Langball Function(Vector2)> ballSpawnMethods = {
+  final Map<Type, Langball Function(Vector2)> _ballSpawnMethods = {
     AssemblyBall: (Vector2 pos) {
       return AssemblyBall(startPos: pos);
     },
@@ -48,21 +48,21 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     },
   };
 
-  static const double previewSize = 25;
-  static const double previewSpacer = 10;
-  static const int maxPreviewCount = 5;
-  int curPreviewCount = 1;
-  final Queue<LangBallPreview> upcomingBallPreviews = Queue();
+  static const double _previewSize = 25;
+  static const double _previewSpacer = 10;
+  static const int _maxPreviewCount = 5;
+  int _curPreviewCount = 1;
+  final Queue<LangBallPreview> _upcomingBallPreviews = Queue();
 
-  static const double dropHeight = 50;
-  static const int maxSpawnOffset = 2;
+  static const double _dropHeight = 50;
+  static const int _maxSpawnOffset = 2;
 
-  final List<Langball> balls = [];
-  final Map<Langball, Langball> fusionPairs = {};
+  final List<Langball> _balls = [];
+  final Map<Langball, Langball> _fusionPairs = {};
 
-  double score = 0;
+  double _score = 0;
 
-  bool canDrop = true;
+  bool _canDrop = true;
 
   @override
   Future<void> onLoad() async {
@@ -79,8 +79,8 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
       "Rust.png",
     ]);
 
-    for (int i = 0; i < curPreviewCount; i++) {
-      addNewPreviewBall(rng.nextInt(ballTypes.length - maxSpawnOffset));
+    for (int i = 0; i < _curPreviewCount; i++) {
+      addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
     }
   }
 
@@ -92,18 +92,18 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
     fusePairs();
 
-    fusionPairs.clear();
+    _fusionPairs.clear();
 
     super.update(dt);
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    if (canDrop) {
-      spawnNextBall(Vector2(event.canvasPosition.x, dropHeight));
+    if (_canDrop) {
+      spawnNextBall(Vector2(event.canvasPosition.x, _dropHeight));
 
-      addNewPreviewBall(rng.nextInt(ballTypes.length - maxSpawnOffset));
-      canDrop = false;
+      addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
+      _canDrop = false;
     }
 
     super.onTapDown(event);
@@ -112,75 +112,75 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   /// Adds new preview ball to the screen and shifts all current previews over
   void addNewPreviewBall(int spriteIndex) {
     /// Move over all current previews
-    int curNumPreviews = upcomingBallPreviews.length;
+    int curNumPreviews = _upcomingBallPreviews.length;
 
     for (int i = 0; i < curNumPreviews; ++i) {
-      LangBallPreview prev = upcomingBallPreviews.removeFirst();
+      LangBallPreview prev = _upcomingBallPreviews.removeFirst();
 
-      prev.position.x += previewSize + previewSpacer;
+      prev.position.x += _previewSize + _previewSpacer;
 
-      upcomingBallPreviews.add(prev);
+      _upcomingBallPreviews.add(prev);
     }
 
     /// Add in a new preview
-    Vector2 position = Vector2(0, previewSize / 2);
+    Vector2 position = Vector2(0, _previewSize / 2);
 
     LangBallPreview preview = LangBallPreview(
-        type: ballTypes[spriteIndex], pos: position, diameter: previewSize);
+        type: _ballTypes[spriteIndex], pos: position, diameter: _previewSize);
 
-    upcomingBallPreviews.add(preview);
+    _upcomingBallPreviews.add(preview);
     add(preview);
   }
 
   /// Increases the max number of previews and adds a new preview ball to the screen
   void increasePreviewCount() {
-    curPreviewCount++;
+    _curPreviewCount++;
 
-    addNewPreviewBall(rng.nextInt(ballTypes.length - maxSpawnOffset));
+    addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
   }
 
   /// Checks if the current preview count can be increased
   bool canIncreasePreviewCount() {
-    return curPreviewCount + 1 == maxPreviewCount;
+    return _curPreviewCount + 1 == _maxPreviewCount;
   }
 
   /// Dequeues the next preview and instantiates a new ball of the same type
   void spawnNextBall(Vector2 pos) {
-    LangBallPreview nextBallPrev = upcomingBallPreviews.removeFirst();
+    LangBallPreview nextBallPrev = _upcomingBallPreviews.removeFirst();
     remove(nextBallPrev);
 
-    Langball ball = ballSpawnMethods[nextBallPrev.getType()]!(pos);
+    Langball ball = _ballSpawnMethods[nextBallPrev.getType()]!(pos);
 
-    balls.add(ball);
+    _balls.add(ball);
     add(ball);
   }
 
   /// Check if any balls are considered falling and manage if dropping is allowed
   void movementCheck() {
-    for (int i = 0; i < balls.length; ++i) {
-      if (balls[i].isFalling()) {
-        canDrop = false;
+    for (int i = 0; i < _balls.length; ++i) {
+      if (_balls[i].isFalling()) {
+        _canDrop = false;
         return;
       }
     }
 
-    canDrop = true;
+    _canDrop = true;
   }
 
   /// Handle collisions between balls and mark ball pairs for fusion if needed
   void manageCollisions() {
-    for (int i = 0; i < balls.length; ++i) {
-      for (int j = i + 1; j < balls.length; ++j) {
-        bool colliding = balls[i].isColliding(balls[j]);
+    for (int i = 0; i < _balls.length; ++i) {
+      for (int j = i + 1; j < _balls.length; ++j) {
+        bool colliding = _balls[i].isColliding(_balls[j]);
 
         if (colliding &&
-            balls[i].runtimeType == balls[j].runtimeType &&
-            !fusionPairs.containsKey(balls[i]) &&
-            !fusionPairs.containsValue(balls[j]) &&
-            !fusionPairs.containsKey(balls[j])) {
-          fusionPairs[balls[i]] = balls[j];
+            _balls[i].runtimeType == _balls[j].runtimeType &&
+            !_fusionPairs.containsKey(_balls[i]) &&
+            !_fusionPairs.containsValue(_balls[j]) &&
+            !_fusionPairs.containsKey(_balls[j])) {
+          _fusionPairs[_balls[i]] = _balls[j];
         } else if (colliding) {
-          balls[i].resolveCollision(balls[j]);
+          _balls[i].resolveCollision(_balls[j]);
         }
       }
     }
@@ -188,22 +188,22 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
   /// Fuses a pair of balls into a higher level ball
   void fusePairs() {
-    for (MapEntry<Langball, Langball> pair in fusionPairs.entries) {
-      balls.remove(pair.key);
-      balls.remove(pair.value);
+    for (MapEntry<Langball, Langball> pair in _fusionPairs.entries) {
+      _balls.remove(pair.key);
+      _balls.remove(pair.value);
       remove(pair.key);
       remove(pair.value);
 
-      score += pair.key.getScoreValue();
+      _score += pair.key.getScoreValue();
 
-      int curTypeIndex = ballTypes.indexOf(pair.key.runtimeType);
+      int curTypeIndex = _ballTypes.indexOf(pair.key.runtimeType);
 
-      if (curTypeIndex + 1 == ballTypes.length) return;
+      if (curTypeIndex + 1 == _ballTypes.length) return;
 
       Langball newBall =
-          ballSpawnMethods[ballTypes[curTypeIndex + 1]]!(pair.key.position);
+          _ballSpawnMethods[_ballTypes[curTypeIndex + 1]]!(pair.key.position);
 
-      balls.add(newBall);
+      _balls.add(newBall);
       add(newBall);
     }
   }
