@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttermelon/game/game.dart';
+import 'package:fluttermelon/game/lang_balls/lang_ball_types.dart';
 import 'package:fluttermelon/game/shop_button.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class ShopScreen extends StatefulWidget {
 
 class ShopScreenState extends State<ShopScreen> {
   int _previewCost = 100;
+  int _ballRemovalCost = 2500;
 
   void onVisible() {
     setState(() {});
@@ -44,26 +46,73 @@ class ShopScreenState extends State<ShopScreen> {
                       widget.game.increasePreviewCount();
                       widget.game.chargePurchase(_previewCost);
                       _previewCost = 200;
+                      setState(() {});
                     },
                     () {
                       widget.game.increasePreviewCount();
                       widget.game.chargePurchase(_previewCost);
                       _previewCost = 600;
+                      setState(() {});
                     },
                     () {
                       widget.game.increasePreviewCount();
                       widget.game.chargePurchase(_previewCost);
                       _previewCost = 1200;
+                      setState(() {});
                     },
                     () {
                       widget.game.increasePreviewCount();
                       widget.game.chargePurchase(_previewCost);
+                      setState(() {});
                     }
                   ],
                   canPurchase: () {
                     return widget.game.canIncreasePreviewCount() &&
                         widget.game.canPurchase(_previewCost);
                   }),
+
+              SizedBox(height: 20),
+
+              /// Smaller ball removal
+              ShopButton(
+                  maxTier: 2,
+                  tierTexts: [
+                    "Remove Assembly Balls\nCost: 2500 points",
+                    "Remove C++ Balls\nCost: 7500 points"
+                  ],
+                  tierActions: [
+                    () {
+                      widget.game.removeBallType(LangBallTypes.assembly);
+                      widget.game.chargePurchase(_ballRemovalCost);
+                      _ballRemovalCost = 7500;
+                      setState(() {});
+                    },
+                    () {
+                      widget.game.removeBallType(LangBallTypes.cpp);
+                      widget.game.chargePurchase(_ballRemovalCost);
+                      setState(() {});
+                    }
+                  ],
+                  canPurchase: () {
+                    return widget.game.canPurchase(_ballRemovalCost);
+                  }),
+
+              SizedBox(height: 20),
+
+              ShopButton(
+                  maxTier: 0,
+                  tierTexts: [
+                    "Give yourself 100k points (Debug to skip some gameplay)"
+                  ],
+                  tierActions: [
+                    () {
+                      widget.game.addScore(2500);
+                      setState(() {});
+                    }
+                  ],
+                  canPurchase: () {
+                    return true;
+                  })
             ],
           ),
         ),
