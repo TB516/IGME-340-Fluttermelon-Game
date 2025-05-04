@@ -64,7 +64,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
     _scoreTextComponent.position = Vector2(
         size.x - _scoreTextComponent.size.x - _previewSpacer,
-        _scoreTextComponent.size.y);
+        _previewSpacer + _scoreTextComponent.size.y);
 
     add(_scoreTextComponent);
   }
@@ -100,7 +100,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     _scoreTextComponent.text = 'Score: $_score';
     _scoreTextComponent.position = Vector2(
         size.x - _scoreTextComponent.size.x - _previewSpacer,
-        _scoreTextComponent.size.y);
+        _previewSpacer + _scoreTextComponent.size.y);
   }
 
   /// Adds new preview ball to the screen and shifts all current previews over
@@ -117,7 +117,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     }
 
     /// Add in a new preview
-    Vector2 position = Vector2(_previewSpacer, _previewSize / 2);
+    Vector2 position = Vector2(_previewSpacer, _previewSize);
 
     LangBallPreview preview = LangBallPreview(
         type: _ballTypes[spriteIndex], pos: position, diameter: _previewSize);
@@ -197,7 +197,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
   /// Reduces score by purchase amount
   void chargePurchase(double amount) {
-    _score -= amount;
+    addScore(-amount);
   }
 
   /// Checks if the current preview count can be increased
