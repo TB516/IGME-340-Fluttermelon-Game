@@ -97,59 +97,6 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     super.onTapDown(event);
   }
 
-  /// Adds score and updates the text
-  void addScore(int amount) {
-    _score += amount;
-    _scoreTextComponent.text = 'Score: $_score';
-    _scoreTextComponent.position = Vector2(
-        size.x - _scoreTextComponent.size.x - _previewSpacer,
-        _previewSpacer + _scoreTextComponent.size.y);
-  }
-
-  /// Checks if score multiplier can be upgraded
-  bool canUpgradeScoreMultiplier() {
-    return _scoreMultiplier + 1 <= _maxScoreMultiplier;
-  }
-
-  /// Increases score multiplier by 1
-  void upgradeScoreMultiplier() {
-    _scoreMultiplier++;
-  }
-
-  /// Adds new preview ball to the screen and shifts all current previews over
-  void addNewPreviewBall(int spriteIndex) {
-    /// Move over all current previews
-    int curNumPreviews = _upcomingBallPreviews.length;
-
-    for (int i = 0; i < curNumPreviews; ++i) {
-      LangBallPreview prev = _upcomingBallPreviews.removeFirst();
-
-      prev.position.x += _previewSize + _previewSpacer;
-
-      _upcomingBallPreviews.add(prev);
-    }
-
-    /// Add in a new preview
-    Vector2 position = Vector2(_previewSpacer, _previewSize);
-
-    LangBallPreview preview = LangBallPreview(
-        type: _ballTypes[spriteIndex], pos: position, diameter: _previewSize);
-
-    _upcomingBallPreviews.add(preview);
-    add(preview);
-  }
-
-  /// Dequeues the next preview and instantiates a new ball of the same type
-  void spawnNextBall(Vector2 pos) {
-    LangBallPreview nextBallPrev = _upcomingBallPreviews.removeFirst();
-    remove(nextBallPrev);
-
-    Langball ball = Langball(type: nextBallPrev.getType(), startPos: pos);
-
-    _balls.add(ball);
-    add(ball);
-  }
-
   /// Check if any balls are considered falling and manage if dropping is allowed
   void movementCheck() {
     for (int i = 0; i < _balls.length; ++i) {
@@ -201,6 +148,59 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
       _balls.add(newBall);
       add(newBall);
     }
+  }
+
+  /// Adds score and updates the text
+  void addScore(int amount) {
+    _score += amount;
+    _scoreTextComponent.text = 'Score: $_score';
+    _scoreTextComponent.position = Vector2(
+        size.x - _scoreTextComponent.size.x - _previewSpacer,
+        _previewSpacer + _scoreTextComponent.size.y);
+  }
+
+  /// Checks if score multiplier can be upgraded
+  bool canUpgradeScoreMultiplier() {
+    return _scoreMultiplier + 1 <= _maxScoreMultiplier;
+  }
+
+  /// Increases score multiplier by 1
+  void upgradeScoreMultiplier() {
+    _scoreMultiplier++;
+  }
+
+  /// Adds new preview ball to the screen and shifts all current previews over
+  void addNewPreviewBall(int spriteIndex) {
+    /// Move over all current previews
+    int curNumPreviews = _upcomingBallPreviews.length;
+
+    for (int i = 0; i < curNumPreviews; ++i) {
+      LangBallPreview prev = _upcomingBallPreviews.removeFirst();
+
+      prev.position.x += _previewSize + _previewSpacer;
+
+      _upcomingBallPreviews.add(prev);
+    }
+
+    /// Add in a new preview
+    Vector2 position = Vector2(_previewSpacer, _previewSize);
+
+    LangBallPreview preview = LangBallPreview(
+        type: _ballTypes[spriteIndex], pos: position, diameter: _previewSize);
+
+    _upcomingBallPreviews.add(preview);
+    add(preview);
+  }
+
+  /// Dequeues the next preview and instantiates a new ball of the same type
+  void spawnNextBall(Vector2 pos) {
+    LangBallPreview nextBallPrev = _upcomingBallPreviews.removeFirst();
+    remove(nextBallPrev);
+
+    Langball ball = Langball(type: nextBallPrev.getType(), startPos: pos);
+
+    _balls.add(ball);
+    add(ball);
   }
 
   /// Checks if purchase can be made
