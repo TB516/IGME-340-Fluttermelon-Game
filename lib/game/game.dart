@@ -29,7 +29,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   static const double _previewSize = 25;
   static const double _previewSpacer = 10;
   static const int _maxPreviewCount = 5;
-  int _curPreviewCount = 5;
+  int _curPreviewCount = 1;
   final Queue<LangBallPreview> _upcomingBallPreviews = Queue();
 
   static const double _dropHeight = 50;
