@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:fluttermelon/game/game.dart';
 import 'package:fluttermelon/game/shop_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   runApp(const FluttermelonApp());
@@ -30,26 +31,52 @@ class FluttermelonHome extends StatefulWidget {
 
 class _FluttermelonHomeState extends State<FluttermelonHome> {
   final GlobalKey<ShopScreenState> shopKey = GlobalKey<ShopScreenState>();
+  late final SharedPreferences _preferences;
+
   int curBottomTab = 0;
 
-  late final FluttermelonGame _game;
-  late final List<Widget> bottomNavScreens;
+  int _highScore = 0;
+
+  FluttermelonGame _game =
+      FluttermelonGame(resetGameCallback: () {}, highScore: 0);
+  List<Widget> bottomNavScreens = [
+    Text("waiting"),
+    Text("Waiting"),
+  ];
 
   final bottomNavButtons = [
     BottomNavigationBarItem(icon: Icon(Icons.gamepad), label: 'Game'),
     BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Shop')
   ];
 
-  @override
-  void initState() {
-    super.initState();
+  void _resetGame({int score = 0}) {
+    _highScore = _preferences.getInt('highScore') ?? 0;
 
-    _game = FluttermelonGame();
+    if (score > _highScore) {
+      _preferences.setInt('highScore', score);
+      _highScore = score;
+    }
+
+    _game =
+        FluttermelonGame(resetGameCallback: _resetGame, highScore: _highScore);
 
     bottomNavScreens = [
       GameWidget(game: _game),
       ShopScreen(key: shopKey, game: _game),
     ];
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() async {
+      _preferences = await SharedPreferences.getInstance();
+      _resetGame();
+      setState(() {}); // Ensure the UI updates after initialization
+    });
   }
 
   @override

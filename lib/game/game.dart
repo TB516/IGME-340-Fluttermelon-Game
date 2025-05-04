@@ -21,10 +21,13 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     LangBallTypes.flutter
   ];
 
-  static final TextPaint _textPaint = TextPaint(
-      style: TextStyle(fontFamily: "Helvetica", fontWeight: FontWeight.w700));
+  static final TextStyle _textStyle =
+      TextStyle(fontFamily: "Helvetica", fontWeight: FontWeight.w700);
+  static final TextPaint _textPaint = TextPaint(style: _textStyle);
   late final TextComponent _scoreTextComponent;
+  late final TextComponent _highScoreTextComponent;
   int _score = 0;
+  late final int _highScore;
   int _scoreMultiplier = 1;
 
   static const double _previewSize = 25;
@@ -42,6 +45,16 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   static const _minBallTypesLoaded = 5;
   static const _maxScoreMultiplier = 6;
   bool _canDrop = true;
+
+  static const int _gameOverLine = 45;
+
+  late final Function _resetGame;
+
+  FluttermelonGame(
+      {required VoidCallback resetGameCallback, required int highScore}) {
+    _resetGame = resetGameCallback;
+    _highScore = highScore;
+  }
 
   @override
   Future<void> onLoad() async {
@@ -65,15 +78,27 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     _scoreTextComponent =
         TextComponent(text: "Score: $_score", textRenderer: _textPaint);
 
+    _highScoreTextComponent = TextComponent(
+        text: "High Score: $_highScore", textRenderer: _textPaint);
+
     _scoreTextComponent.position = Vector2(
         size.x - _scoreTextComponent.size.x - _previewSpacer,
         _previewSpacer + _scoreTextComponent.size.y);
 
+    _highScoreTextComponent.position = Vector2(
+        size.x - _highScoreTextComponent.size.x - _previewSpacer,
+        (_previewSpacer * 2) +
+            _scoreTextComponent.size.y +
+            _highScoreTextComponent.size.y);
+
     add(_scoreTextComponent);
+    add(_highScoreTextComponent);
   }
 
   @override
   void update(double dt) {
+    gameOverCheck();
+
     movementCheck();
 
     manageCollisions();
@@ -95,6 +120,38 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     }
 
     super.onTapDown(event);
+  }
+
+  /// Checks to see if the game is over
+  void gameOverCheck() {
+    for (int i = 0; i < _balls.length; ++i) {
+      if (_balls[i].position.y <= _gameOverLine) {
+        pauseEngine();
+
+        showDialog(
+          context: buildContext!,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Game Over', style: _textStyle),
+              content: Text('Score: $_score\nHigh Score: $_highScore',
+                  style: _textStyle),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _resetGame(score: _score);
+                  },
+                  child: const Text(
+                    'Play Again',
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
+    }
   }
 
   /// Check if any balls are considered falling and manage if dropping is allowed
