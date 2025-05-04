@@ -16,6 +16,7 @@ class ShopScreenState extends State<ShopScreen> {
 
   void onVisible() {
     setState(() {});
+    print(_previewCost);
   }
 
   @override
@@ -33,32 +34,31 @@ class ShopScreenState extends State<ShopScreen> {
               ShopButton(
                   maxTier: 4,
                   tierTexts: [
-                    "Increase number of previews to 2\nCost: $_previewCost points",
-                    "Increase number of previews to 3\nCost: $_previewCost points",
-                    "Increase number of previews to 4\nCost: $_previewCost points",
-                    "Increase number of previews to 5\nCost: $_previewCost points",
+                    "Increase number of previews to 2\nCost: 100 points",
+                    "Increase number of previews to 3\nCost: 200 points",
+                    "Increase number of previews to 4\nCost: 600 points",
+                    "Increase number of previews to 5\nCost: 1200 points",
                     "No more preview upgrades!"
                   ],
                   tierActions: [
                     () {
                       widget.game.increasePreviewCount();
                       widget.game.chargePurchase(_previewCost);
-                      _previewCost *= 2;
+                      _previewCost = 200;
                     },
                     () {
                       widget.game.increasePreviewCount();
                       widget.game.chargePurchase(_previewCost);
-                      _previewCost *= 3;
+                      _previewCost = 600;
                     },
                     () {
                       widget.game.increasePreviewCount();
                       widget.game.chargePurchase(_previewCost);
-                      _previewCost *= 4;
+                      _previewCost = 1200;
                     },
                     () {
                       widget.game.increasePreviewCount();
                       widget.game.chargePurchase(_previewCost);
-                      _previewCost *= 5;
                     }
                   ],
                   canPurchase: () {
