@@ -12,6 +12,7 @@ dependencies:
   flame: ^1.28.1
   flutter_launcher_icons: ^0.14.3
   shared_preferences: ^2.5.3
+  flame_audio: ^2.11.5
 
 dev_dependencies:
   flutter_test:
@@ -29,3 +30,4 @@ flutter:
           weight: 700
   assets:
     - assets/images/
+    - assets/audio/

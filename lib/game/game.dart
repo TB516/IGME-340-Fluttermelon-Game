@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball_preview.dart';
@@ -74,6 +75,8 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
       "Rust.png",
     ]);
 
+    await FlameAudio.audioCache.loadAll(['drop.wav', 'labyrinth.mp3']);
+
     for (int i = 0; i < _curPreviewCount; i++) {
       addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
     }
@@ -116,6 +119,8 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     if (_canDrop) {
+      FlameAudio.play('drop.wav');
+
       spawnNextBall(Vector2(event.canvasPosition.x, _dropHeight));
 
       addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
