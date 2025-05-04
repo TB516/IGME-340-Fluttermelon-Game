@@ -78,7 +78,8 @@ class ShopScreenState extends State<ShopScreen> {
                   maxTier: 2,
                   tierTexts: [
                     "Remove Assembly Balls\nCost: 2500 points",
-                    "Remove C++ Balls\nCost: 7500 points"
+                    "Remove C++ Balls\nCost: 7500 points",
+                    "No more ball removal upgrades"
                   ],
                   tierActions: [
                     () {
