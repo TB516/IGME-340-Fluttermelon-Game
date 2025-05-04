@@ -30,8 +30,9 @@ class FluttermelonHome extends StatefulWidget {
 }
 
 class _FluttermelonHomeState extends State<FluttermelonHome> {
-  final GlobalKey<ShopScreenState> shopKey = GlobalKey<ShopScreenState>();
   late final SharedPreferences _preferences;
+
+  GlobalKey<ShopScreenState> shopKey = GlobalKey<ShopScreenState>();
 
   int curBottomTab = 0;
 
@@ -59,6 +60,8 @@ class _FluttermelonHomeState extends State<FluttermelonHome> {
 
     _game =
         FluttermelonGame(resetGameCallback: _resetGame, highScore: _highScore);
+
+    shopKey = GlobalKey<ShopScreenState>();
 
     bottomNavScreens = [
       GameWidget(game: _game),
