@@ -23,9 +23,8 @@ class _ShopButtonState extends State<ShopButton> {
 
   void _onPressed() {
     widget.tierActions[currentTier]();
-    setState(() {
-      currentTier++;
-    });
+    currentTier++;
+    setState(() {});
   }
 
   @override
@@ -40,10 +39,12 @@ class _ShopButtonState extends State<ShopButton> {
             foregroundColor: Colors.black,
             backgroundColor: Colors.yellow,
           ),
-          child: Text(
-            widget.tierTexts[currentTier],
-            textAlign: TextAlign.center,
-          ),
+          child: Padding(
+              padding: EdgeInsets.all(8),
+              child: Text(
+                widget.tierTexts[currentTier],
+                textAlign: TextAlign.center,
+              )),
         ),
         SizedBox(height: 8),
         Row(
