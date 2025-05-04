@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:fluttermelon/game/game.dart';
+import 'package:fluttermelon/game/shop.dart';
 
 void main() async {
   runApp(const FluttermelonApp());
@@ -29,14 +30,26 @@ class FluttermelonHome extends StatefulWidget {
 
 class _FluttermelonHomeState extends State<FluttermelonHome> {
   int curBottomTab = 0;
-  final bottomNavScreens = [
-    GameWidget(game: FluttermelonGame()),
-    const Center(child: Text('Shop Screen Placeholder')),
-  ];
+
+  late final FluttermelonGame _game;
+  late final bottomNavScreens;
+
   final bottomNavButtons = [
     BottomNavigationBarItem(icon: Icon(Icons.gamepad), label: 'Game'),
     BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Shop')
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _game = FluttermelonGame();
+
+    bottomNavScreens = [
+      GameWidget(game: _game),
+      ShopScreen(game: _game),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
