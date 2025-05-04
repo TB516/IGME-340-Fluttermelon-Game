@@ -2,24 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:fluttermelon/game/game.dart';
 import 'package:fluttermelon/game/shop_button.dart';
 
-class ShopScreen extends StatefulWidget {
+class Shop extends StatefulWidget {
   final FluttermelonGame game;
 
-  const ShopScreen({super.key, required this.game});
+  const Shop({super.key, required this.game});
 
   @override
-  _ShopScreenState createState() => _ShopScreenState();
+  _ShopState createState() => _ShopState();
 }
 
-class _ShopScreenState extends State<ShopScreen> {
-  // Example list of ShopButton widgets
+class _ShopState extends State<Shop> {
   final List<Widget> shopButtons = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shop'),
+        title: Center(child: Text('Shop')),
       ),
       body: SingleChildScrollView(
         child: Padding(

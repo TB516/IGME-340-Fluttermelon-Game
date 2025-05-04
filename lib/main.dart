@@ -47,7 +47,7 @@ class _FluttermelonHomeState extends State<FluttermelonHome> {
 
     bottomNavScreens = [
       GameWidget(game: _game),
-      ShopScreen(game: _game),
+      Shop(game: _game),
     ];
   }
 
@@ -62,6 +62,12 @@ class _FluttermelonHomeState extends State<FluttermelonHome> {
         onTap: (value) {
           setState(() {
             curBottomTab = value;
+
+            if (value == 0) {
+              _game.resumeEngine();
+            } else {
+              _game.pauseEngine();
+            }
           });
         },
       ),
