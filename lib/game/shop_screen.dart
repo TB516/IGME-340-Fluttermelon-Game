@@ -15,6 +15,7 @@ class ShopScreen extends StatefulWidget {
 class ShopScreenState extends State<ShopScreen> {
   int _previewCost = 100;
   int _ballRemovalCost = 2500;
+  int _scoreBooster = 1500;
 
   void onVisible() {
     setState(() {});
@@ -96,6 +97,53 @@ class ShopScreenState extends State<ShopScreen> {
                   ],
                   canPurchase: () {
                     return widget.game.canPurchase(_ballRemovalCost);
+                  }),
+
+              SizedBox(height: 20),
+
+              ShopButton(
+                  maxTier: 5,
+                  tierTexts: [
+                    "Double points earned from fusion\nCost: 1500 points",
+                    "Double points earned from fusion\nCost: 4000 points",
+                    "Double points earned from fusion\nCost: 10000 points",
+                    "Double points earned from fusion\nCost: 30000 points",
+                    "Double points earned from fusion\nCost: 50000 points",
+                    "No more point boosters"
+                  ],
+                  tierActions: [
+                    () {
+                      widget.game.setScoreMultiplier(2);
+                      widget.game.chargePurchase(_scoreBooster);
+                      _scoreBooster = 4000;
+                      setState(() {});
+                    },
+                    () {
+                      widget.game.setScoreMultiplier(4);
+                      widget.game.chargePurchase(_scoreBooster);
+                      _scoreBooster = 10000;
+                      setState(() {});
+                    },
+                    () {
+                      widget.game.setScoreMultiplier(8);
+                      widget.game.chargePurchase(_scoreBooster);
+                      _scoreBooster = 30000;
+                      setState(() {});
+                    },
+                    () {
+                      widget.game.setScoreMultiplier(16);
+                      widget.game.chargePurchase(_scoreBooster);
+                      _scoreBooster = 50000;
+                      setState(() {});
+                    },
+                    () {
+                      widget.game.setScoreMultiplier(32);
+                      widget.game.chargePurchase(_scoreBooster);
+                      setState(() {});
+                    },
+                  ],
+                  canPurchase: () {
+                    return widget.game.canPurchase(_scoreBooster);
                   }),
 
               SizedBox(height: 20),
