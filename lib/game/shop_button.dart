@@ -23,7 +23,11 @@ class ShopButtonState extends State<ShopButton> {
 
   void _onPressed() {
     widget.tierActions[currentTier]();
-    currentTier++;
+
+    if (widget.maxTier != 0) {
+      currentTier++;
+    }
+
     setState(() {});
   }
 
