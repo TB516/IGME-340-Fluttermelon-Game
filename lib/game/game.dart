@@ -1,7 +1,9 @@
 import 'dart:collection';
 import 'dart:math';
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball_preview.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball_types.dart';
@@ -19,6 +21,11 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     LangBallTypes.flutter
   ];
 
+  static final TextPaint _textPaint = TextPaint(
+      style: TextStyle(fontFamily: "Helvetica", fontWeight: FontWeight.w700));
+  late final TextComponent _scoreTextComponent;
+  double _score = 0;
+
   static const double _previewSize = 25;
   static const double _previewSpacer = 10;
   static const int _maxPreviewCount = 5;
@@ -30,8 +37,6 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
   final List<Langball> _balls = [];
   final Map<Langball, Langball> _fusionPairs = {};
-
-  double _score = 0;
 
   bool _canDrop = true;
 
@@ -53,6 +58,15 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     for (int i = 0; i < _curPreviewCount; i++) {
       addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
     }
+
+    _scoreTextComponent =
+        TextComponent(text: "Score: $_score", textRenderer: _textPaint);
+
+    _scoreTextComponent.position = Vector2(
+        size.x - _scoreTextComponent.size.x - _previewSpacer,
+        _scoreTextComponent.size.y);
+
+    add(_scoreTextComponent);
   }
 
   @override
@@ -80,6 +94,15 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     super.onTapDown(event);
   }
 
+  /// Adds score and updates the text
+  void addScore(double amount) {
+    _score += amount;
+    _scoreTextComponent.text = 'Score: $_score';
+    _scoreTextComponent.position = Vector2(
+        size.x - _scoreTextComponent.size.x - _previewSpacer,
+        _scoreTextComponent.size.y);
+  }
+
   /// Adds new preview ball to the screen and shifts all current previews over
   void addNewPreviewBall(int spriteIndex) {
     /// Move over all current previews
@@ -94,7 +117,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     }
 
     /// Add in a new preview
-    Vector2 position = Vector2(0, _previewSize / 2);
+    Vector2 position = Vector2(_previewSpacer, _previewSize / 2);
 
     LangBallPreview preview = LangBallPreview(
         type: _ballTypes[spriteIndex], pos: position, diameter: _previewSize);
@@ -153,7 +176,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
       remove(pair.key);
       remove(pair.value);
 
-      _score += pair.key.getScoreValue();
+      addScore(pair.key.getScoreValue());
 
       int curTypeIndex = _ballTypes.indexOf(pair.key.getType());
 
