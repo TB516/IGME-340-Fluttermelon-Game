@@ -221,10 +221,16 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   void removeBallType(LangBallTypes type) {
     _ballTypes.remove(type);
 
-    for (int i = _balls.length; i >= 0; --i) {
+    for (int i = _balls.length - 1; i >= 0; --i) {
       if (_balls[i].getType() == type) {
         remove(_balls.removeAt(i));
       }
+    }
+
+    _upcomingBallPreviews.removeWhere((preview) => preview.getType() == type);
+
+    while (_upcomingBallPreviews.length != _curPreviewCount) {
+      addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
     }
   }
 }
