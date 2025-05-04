@@ -103,18 +103,6 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     add(preview);
   }
 
-  /// Increases the max number of previews and adds a new preview ball to the screen
-  void increasePreviewCount() {
-    _curPreviewCount++;
-
-    addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
-  }
-
-  /// Checks if the current preview count can be increased
-  bool canIncreasePreviewCount() {
-    return _curPreviewCount + 1 == _maxPreviewCount;
-  }
-
   /// Dequeues the next preview and instantiates a new ball of the same type
   void spawnNextBall(Vector2 pos) {
     LangBallPreview nextBallPrev = _upcomingBallPreviews.removeFirst();
@@ -176,6 +164,39 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
       _balls.add(newBall);
       add(newBall);
+    }
+  }
+
+  /// Checks if purchase can be made
+  bool canPurchase(double cost) {
+    return _score - cost >= 0;
+  }
+
+  /// Reduces score by purchase amount
+  void chargePurchase(double amount) {
+    _score -= amount;
+  }
+
+  /// Checks if the current preview count can be increased
+  bool canIncreasePreviewCount() {
+    return _curPreviewCount + 1 == _maxPreviewCount;
+  }
+
+  /// Increases the max number of previews and adds a new preview ball to the screen
+  void increasePreviewCount() {
+    _curPreviewCount++;
+
+    addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
+  }
+
+  /// Removes ball type from game and ball pool
+  void removeBallType(LangBallTypes type) {
+    _ballTypes.remove(type);
+
+    for (int i = _balls.length; i >= 0; --i) {
+      if (_balls[i].getType() == type) {
+        remove(_balls.removeAt(i));
+      }
     }
   }
 }
