@@ -1,26 +1,36 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:fluttermelon/game/game.dart';
+import 'package:fluttermelon/game/lang_balls/lang_ball_types.dart';
 
 final Vector2 gravity = Vector2(0, 100);
 final double rotationAmount = .1;
 
-abstract class Langball extends SpriteComponent
+class Langball extends SpriteComponent
     with HasGameReference<FluttermelonGame>, HasCollisionDetection {
   Vector2 _velocity = Vector2(0, 0);
+  late final LangBallTypes _type;
   late final double _radius;
   late final double _mass;
 
-  Langball(
-      {required Vector2 startPos,
-      required double diameter,
-      required double ballMass}) {
+  Langball({required LangBallTypes type, required Vector2 startPos}) {
+    _type = type;
+
     position = startPos;
 
-    size = Vector2(diameter, diameter);
+    size = Vector2(type.diameter, type.diameter);
     anchor = Anchor.center;
 
-    _radius = diameter / 2;
-    _mass = ballMass;
+    _radius = type.diameter / 2;
+    _mass = type.mass;
+  }
+
+  @override
+  FutureOr<void> onLoad() {
+    sprite = Sprite(game.images.fromCache(_type.file));
+
+    return super.onLoad();
   }
 
   @override
@@ -47,6 +57,10 @@ abstract class Langball extends SpriteComponent
       position.x = game.size.x - _radius;
       _velocity.x = 0;
     }
+  }
+
+  LangBallTypes getType() {
+    return _type;
   }
 
   bool isFalling() {

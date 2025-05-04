@@ -2,56 +2,27 @@ import 'dart:collection';
 import 'dart:math';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:fluttermelon/game/lang_balls/assembly_ball.dart';
-import 'package:fluttermelon/game/lang_balls/c_sharp_ball.dart';
-import 'package:fluttermelon/game/lang_balls/cpp_ball.dart';
-import 'package:fluttermelon/game/lang_balls/flutter_ball.dart';
-import 'package:fluttermelon/game/lang_balls/go_ball.dart';
-import 'package:fluttermelon/game/lang_balls/javascript_ball.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball.dart';
 import 'package:fluttermelon/game/lang_balls/lang_ball_preview.dart';
-import 'package:fluttermelon/game/lang_balls/rust_ball.dart';
+import 'package:fluttermelon/game/lang_balls/lang_ball_types.dart';
 
 class FluttermelonGame extends FlameGame with TapCallbacks {
   final Random _rng = Random();
 
-  final List<Type> _ballTypes = [
-    AssemblyBall,
-    CppBall,
-    RustBall,
-    GoBall,
-    CSharpBall,
-    JavascriptBall,
-    FlutterBall
+  final List<LangBallTypes> _ballTypes = [
+    LangBallTypes.assembly,
+    LangBallTypes.cpp,
+    LangBallTypes.rust,
+    LangBallTypes.go,
+    LangBallTypes.csharp,
+    LangBallTypes.javascript,
+    LangBallTypes.flutter
   ];
-  final Map<Type, Langball Function(Vector2)> _ballSpawnMethods = {
-    AssemblyBall: (Vector2 pos) {
-      return AssemblyBall(startPos: pos);
-    },
-    CppBall: (Vector2 pos) {
-      return CppBall(startPos: pos);
-    },
-    RustBall: (Vector2 pos) {
-      return RustBall(startPos: pos);
-    },
-    GoBall: (Vector2 pos) {
-      return GoBall(startPos: pos);
-    },
-    CSharpBall: (Vector2 pos) {
-      return CSharpBall(startPos: pos);
-    },
-    JavascriptBall: (Vector2 pos) {
-      return JavascriptBall(startPos: pos);
-    },
-    FlutterBall: (Vector2 pos) {
-      return FlutterBall(startPos: pos);
-    },
-  };
 
   static const double _previewSize = 25;
   static const double _previewSpacer = 10;
   static const int _maxPreviewCount = 5;
-  int _curPreviewCount = 1;
+  int _curPreviewCount = 5;
   final Queue<LangBallPreview> _upcomingBallPreviews = Queue();
 
   static const double _dropHeight = 50;
@@ -149,7 +120,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     LangBallPreview nextBallPrev = _upcomingBallPreviews.removeFirst();
     remove(nextBallPrev);
 
-    Langball ball = _ballSpawnMethods[nextBallPrev.getType()]!(pos);
+    Langball ball = Langball(type: nextBallPrev.getType(), startPos: pos);
 
     _balls.add(ball);
     add(ball);
@@ -174,7 +145,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
         bool colliding = _balls[i].isColliding(_balls[j]);
 
         if (colliding &&
-            _balls[i].runtimeType == _balls[j].runtimeType &&
+            _balls[i].getType() == _balls[j].getType() &&
             !_fusionPairs.containsKey(_balls[i]) &&
             !_fusionPairs.containsValue(_balls[j]) &&
             !_fusionPairs.containsKey(_balls[j])) {
@@ -196,12 +167,12 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
       _score += pair.key.getScoreValue();
 
-      int curTypeIndex = _ballTypes.indexOf(pair.key.runtimeType);
+      int curTypeIndex = _ballTypes.indexOf(pair.key.getType());
 
       if (curTypeIndex + 1 == _ballTypes.length) return;
 
-      Langball newBall =
-          _ballSpawnMethods[_ballTypes[curTypeIndex + 1]]!(pair.key.position);
+      Langball newBall = Langball(
+          type: _ballTypes[curTypeIndex + 1], startPos: pair.key.position);
 
       _balls.add(newBall);
       add(newBall);

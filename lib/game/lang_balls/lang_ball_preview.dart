@@ -1,42 +1,25 @@
 import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:fluttermelon/game/game.dart';
-import 'package:fluttermelon/game/lang_balls/assembly_ball.dart';
-import 'package:fluttermelon/game/lang_balls/c_sharp_ball.dart';
-import 'package:fluttermelon/game/lang_balls/cpp_ball.dart';
-import 'package:fluttermelon/game/lang_balls/flutter_ball.dart';
-import 'package:fluttermelon/game/lang_balls/go_ball.dart';
-import 'package:fluttermelon/game/lang_balls/javascript_ball.dart';
-import 'package:fluttermelon/game/lang_balls/rust_ball.dart';
+import 'package:fluttermelon/game/lang_balls/lang_ball_types.dart';
 
 class LangBallPreview extends SpriteComponent
     with HasGameReference<FluttermelonGame> {
-  late final Type _langBallType;
-  late final String _spriteName;
-
-  static const spriteMap = {
-    AssemblyBall: "Assembly.png",
-    CppBall: "C++.png",
-    RustBall: "Rust.png",
-    GoBall: "Go.png",
-    CSharpBall: "C#.png",
-    JavascriptBall: "Javascript.png",
-    FlutterBall: "Fluter.png",
-  };
+  late final LangBallTypes _langBallType;
 
   LangBallPreview(
-      {required Type type, required Vector2 pos, double diameter = 25}) {
+      {required LangBallTypes type,
+      required Vector2 pos,
+      double diameter = 25}) {
     _langBallType = type;
 
     size = Vector2.all(diameter);
     position = pos;
-
-    _spriteName = spriteMap[_langBallType]!;
   }
 
   @override
   FutureOr<void> onLoad() {
-    sprite = Sprite(game.images.fromCache(_spriteName));
+    sprite = Sprite(game.images.fromCache(_langBallType.file));
 
     return super.onLoad();
   }
@@ -45,7 +28,7 @@ class LangBallPreview extends SpriteComponent
     position = pos;
   }
 
-  Type getType() {
+  LangBallTypes getType() {
     return _langBallType;
   }
 }
