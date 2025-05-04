@@ -30,6 +30,9 @@ class FluttermelonHome extends StatefulWidget {
 }
 
 class _FluttermelonHomeState extends State<FluttermelonHome> {
+  static final TextStyle _textStyle =
+      TextStyle(fontFamily: "Helvetica", fontWeight: FontWeight.w700);
+
   late final SharedPreferences _preferences;
 
   GlobalKey<ShopScreenState> shopKey = GlobalKey<ShopScreenState>();
@@ -89,6 +92,8 @@ class _FluttermelonHomeState extends State<FluttermelonHome> {
       body: IndexedStack(index: curBottomTab, children: bottomNavScreens),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.yellow,
+        selectedLabelStyle: _textStyle,
+        unselectedLabelStyle: _textStyle,
         currentIndex: curBottomTab,
         items: bottomNavButtons,
         onTap: (value) {

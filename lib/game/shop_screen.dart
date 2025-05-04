@@ -13,6 +13,9 @@ class ShopScreen extends StatefulWidget {
 }
 
 class ShopScreenState extends State<ShopScreen> {
+  static final TextStyle _textStyle =
+      TextStyle(fontFamily: "Helvetica", fontWeight: FontWeight.w700);
+
   int _previewCost = 100;
   int _ballRemovalCost = 2500;
   int _scoreBooster = 1500;
@@ -25,7 +28,11 @@ class ShopScreenState extends State<ShopScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Shop')),
+        title: Center(
+            child: Text(
+          'Shop',
+          style: _textStyle,
+        )),
       ),
       body: SingleChildScrollView(
         child: Padding(

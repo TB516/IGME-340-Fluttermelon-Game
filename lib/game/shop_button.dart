@@ -19,6 +19,8 @@ class ShopButton extends StatefulWidget {
 }
 
 class ShopButtonState extends State<ShopButton> {
+  static final TextStyle _textStyle =
+      TextStyle(fontFamily: "Helvetica", fontWeight: FontWeight.w700);
   int currentTier = 0;
 
   void _onPressed() {
@@ -48,6 +50,7 @@ class ShopButtonState extends State<ShopButton> {
               child: Text(
                 widget.tierTexts[currentTier],
                 textAlign: TextAlign.center,
+                style: _textStyle,
               )),
         ),
         SizedBox(height: 8),
