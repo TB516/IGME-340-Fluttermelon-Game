@@ -15,10 +15,10 @@ class ShopButton extends StatefulWidget {
   });
 
   @override
-  _ShopButtonState createState() => _ShopButtonState();
+  ShopButtonState createState() => ShopButtonState();
 }
 
-class _ShopButtonState extends State<ShopButton> {
+class ShopButtonState extends State<ShopButton> {
   int currentTier = 0;
 
   void _onPressed() {
