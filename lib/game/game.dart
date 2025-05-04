@@ -105,7 +105,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   void update(double dt) {
     gameOverCheck();
 
-    movementCheck();
+    // movementCheck();
 
     manageCollisions();
 
@@ -124,7 +124,13 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
       spawnNextBall(Vector2(event.canvasPosition.x, _dropHeight));
 
       addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
+
       _canDrop = false;
+
+      /// Limit dropping to every 1 second
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        _canDrop = true;
+      });
     }
 
     super.onTapDown(event);
