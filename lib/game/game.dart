@@ -202,7 +202,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
 
   /// Checks if the current preview count can be increased
   bool canIncreasePreviewCount() {
-    return _curPreviewCount + 1 == _maxPreviewCount;
+    return _curPreviewCount + 1 <= _maxPreviewCount;
   }
 
   /// Increases the max number of previews and adds a new preview ball to the screen
