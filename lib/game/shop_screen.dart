@@ -12,11 +12,10 @@ class ShopScreen extends StatefulWidget {
 }
 
 class ShopScreenState extends State<ShopScreen> {
-  double _previewCost = 100;
+  int _previewCost = 100;
 
   void onVisible() {
     setState(() {});
-    print(_previewCost);
   }
 
   @override
@@ -64,7 +63,7 @@ class ShopScreenState extends State<ShopScreen> {
                   canPurchase: () {
                     return widget.game.canIncreasePreviewCount() &&
                         widget.game.canPurchase(_previewCost);
-                  })
+                  }),
             ],
           ),
         ),

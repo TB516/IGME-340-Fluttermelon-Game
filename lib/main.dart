@@ -33,7 +33,7 @@ class _FluttermelonHomeState extends State<FluttermelonHome> {
   int curBottomTab = 0;
 
   late final FluttermelonGame _game;
-  late final bottomNavScreens;
+  late final List<Widget> bottomNavScreens;
 
   final bottomNavButtons = [
     BottomNavigationBarItem(icon: Icon(Icons.gamepad), label: 'Game'),

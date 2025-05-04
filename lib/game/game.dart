@@ -24,7 +24,8 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   static final TextPaint _textPaint = TextPaint(
       style: TextStyle(fontFamily: "Helvetica", fontWeight: FontWeight.w700));
   late final TextComponent _scoreTextComponent;
-  double _score = 0;
+  int _score = 0;
+  int _scoreMultiplier = 1;
 
   static const double _previewSize = 25;
   static const double _previewSpacer = 10;
@@ -95,12 +96,16 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   }
 
   /// Adds score and updates the text
-  void addScore(double amount) {
+  void addScore(int amount) {
     _score += amount;
     _scoreTextComponent.text = 'Score: $_score';
     _scoreTextComponent.position = Vector2(
         size.x - _scoreTextComponent.size.x - _previewSpacer,
         _previewSpacer + _scoreTextComponent.size.y);
+  }
+
+  void setScoreMultiplier(int amount) {
+    _scoreMultiplier = amount;
   }
 
   /// Adds new preview ball to the screen and shifts all current previews over
@@ -176,7 +181,7 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
       remove(pair.key);
       remove(pair.value);
 
-      addScore(pair.key.getScoreValue());
+      addScore(pair.key.getScoreValue().floor() * _scoreMultiplier);
 
       int curTypeIndex = _ballTypes.indexOf(pair.key.getType());
 
@@ -191,12 +196,12 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   }
 
   /// Checks if purchase can be made
-  bool canPurchase(double cost) {
+  bool canPurchase(int cost) {
     return _score - cost >= 0;
   }
 
   /// Reduces score by purchase amount
-  void chargePurchase(double amount) {
+  void chargePurchase(int amount) {
     addScore(-amount);
   }
 
