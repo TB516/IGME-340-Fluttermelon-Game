@@ -53,6 +53,7 @@ class _FluttermelonHomeState extends State<FluttermelonHome> {
     BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Shop')
   ];
 
+  /// Callback function to assign a new game and shop to the app, resetting the game
   void _resetGame({int score = 0}) {
     _highScore = _preferences.getInt('highScore') ?? 0;
 
@@ -89,7 +90,11 @@ class _FluttermelonHomeState extends State<FluttermelonHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,
+
+      /// Indexed stack for keeping state
       body: IndexedStack(index: curBottomTab, children: bottomNavScreens),
+
+      // Bottom nav bar to navigate between tabs
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.yellow,
         selectedLabelStyle: _textStyle,

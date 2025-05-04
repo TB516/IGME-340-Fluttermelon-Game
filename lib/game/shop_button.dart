@@ -6,6 +6,11 @@ class ShopButton extends StatefulWidget {
   final List<VoidCallback> tierActions;
   final bool Function() canPurchase;
 
+  /// Creates a shop button with passed in data.
+  /// Max tier - number of tiers the button has
+  /// Tier texts - list of text for each tier
+  /// tier actions - List of actions to perform when the button is clicked at the tier
+  /// can purchase - callback function to ensure the upgrade can be purchased
   const ShopButton({
     super.key,
     required this.maxTier,
@@ -23,6 +28,7 @@ class ShopButtonState extends State<ShopButton> {
       TextStyle(fontFamily: "Helvetica", fontWeight: FontWeight.w700);
   int currentTier = 0;
 
+  /// Calls callback for current tier level then increases to next tier
   void _onPressed() {
     widget.tierActions[currentTier]();
 
@@ -39,6 +45,7 @@ class ShopButtonState extends State<ShopButton> {
 
     return Column(
       children: [
+        /// Actual text button
         ElevatedButton(
           onPressed: isPurchasable ? _onPressed : null,
           style: ElevatedButton.styleFrom(
@@ -54,6 +61,8 @@ class ShopButtonState extends State<ShopButton> {
               )),
         ),
         SizedBox(height: 8),
+
+        /// Light up buttons to indicate number of upgrades purchased
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(widget.maxTier, (index) {

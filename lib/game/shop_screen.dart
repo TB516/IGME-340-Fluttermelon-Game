@@ -27,6 +27,7 @@ class ShopScreenState extends State<ShopScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /// Page title bar
       appBar: AppBar(
         title: Center(
             child: Text(
@@ -34,6 +35,8 @@ class ShopScreenState extends State<ShopScreen> {
           style: _textStyle,
         )),
       ),
+
+      /// Main shop area
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -158,7 +161,7 @@ class ShopScreenState extends State<ShopScreen> {
 
               SizedBox(height: 20),
 
-              /// Cheater
+              /// Cheater button
               ShopButton(
                   maxTier: 0,
                   tierTexts: [
