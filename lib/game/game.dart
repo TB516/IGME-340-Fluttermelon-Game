@@ -57,6 +57,9 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   }
 
   @override
+  Color backgroundColor() => const Color.fromARGB(255, 25, 25, 25);
+
+  @override
   Future<void> onLoad() async {
     super.onLoad();
 
