@@ -139,7 +139,6 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    _resetGame(score: _score);
                   },
                   child: const Text(
                     'Play Again',
@@ -148,7 +147,9 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
               ],
             );
           },
-        );
+        ).then((_) {
+          _resetGame(score: _score);
+        });
         return;
       }
     }
