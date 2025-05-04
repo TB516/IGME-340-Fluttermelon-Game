@@ -107,7 +107,7 @@ class ShopScreenState extends State<ShopScreen> {
                   ],
                   tierActions: [
                     () {
-                      widget.game.addScore(2500);
+                      widget.game.addScore(100000);
                       setState(() {});
                     }
                   ],
