@@ -65,7 +65,7 @@ class Langball extends SpriteComponent
 
   bool isFalling() {
     /// Offset value to account for collision resolution
-    return _velocity.y > 15;
+    return _velocity.y > 25;
   }
 
   double getScoreValue() {
