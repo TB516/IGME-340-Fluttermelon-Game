@@ -88,6 +88,7 @@ class _FluttermelonHomeState extends State<FluttermelonHome> {
       appBar: null,
       body: IndexedStack(index: curBottomTab, children: bottomNavScreens),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.yellow,
         currentIndex: curBottomTab,
         items: bottomNavButtons,
         onTap: (value) {
