@@ -39,6 +39,8 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
   final List<Langball> _balls = [];
   final Map<Langball, Langball> _fusionPairs = {};
 
+  static const _minBallTypesLoaded = 5;
+  static const _maxScoreMultiplier = 6;
   bool _canDrop = true;
 
   @override
@@ -104,8 +106,14 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
         _previewSpacer + _scoreTextComponent.size.y);
   }
 
-  void setScoreMultiplier(int amount) {
-    _scoreMultiplier = amount;
+  /// Checks if score multiplier can be upgraded
+  bool canUpgradeScoreMultiplier() {
+    return _scoreMultiplier + 1 <= _maxScoreMultiplier;
+  }
+
+  /// Increases score multiplier by 1
+  void upgradeScoreMultiplier() {
+    _scoreMultiplier++;
   }
 
   /// Adds new preview ball to the screen and shifts all current previews over
@@ -217,18 +225,41 @@ class FluttermelonGame extends FlameGame with TapCallbacks {
     addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
   }
 
+  /// Checks if the min amount of balls are in the list
+  bool canRemoveBallType() {
+    return _ballTypes.length - 1 >= _minBallTypesLoaded;
+  }
+
   /// Removes ball type from game and ball pool
   void removeBallType(LangBallTypes type) {
     _ballTypes.remove(type);
 
+    /// Remove any in play balls of the same type
     for (int i = _balls.length - 1; i >= 0; --i) {
       if (_balls[i].getType() == type) {
         remove(_balls.removeAt(i));
       }
     }
 
-    _upcomingBallPreviews.removeWhere((preview) => preview.getType() == type);
+    List<LangBallPreview> tempList = [];
 
+    /// Remove all preview balls and either discard or store to add again
+    for (int i = 0; i < _curPreviewCount; ++i) {
+      if (_upcomingBallPreviews.first.getType() == type) {
+        remove(_upcomingBallPreviews.removeFirst());
+      } else {
+        LangBallPreview prev = _upcomingBallPreviews.removeFirst();
+        remove(prev);
+        tempList.add(prev);
+      }
+    }
+
+    /// Add back the removed preview balls
+    for (int i = 0; i < tempList.length; ++i) {
+      addNewPreviewBall(_ballTypes.indexOf(tempList[i].getType()));
+    }
+
+    /// Repopulate preview list with new balls
     while (_upcomingBallPreviews.length != _curPreviewCount) {
       addNewPreviewBall(_rng.nextInt(_ballTypes.length - _maxSpawnOffset));
     }

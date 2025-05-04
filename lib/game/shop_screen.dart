@@ -36,10 +36,10 @@ class ShopScreenState extends State<ShopScreen> {
               ShopButton(
                   maxTier: 4,
                   tierTexts: [
-                    "Increase number of previews to 2\nCost: 100 points",
-                    "Increase number of previews to 3\nCost: 200 points",
-                    "Increase number of previews to 4\nCost: 600 points",
-                    "Increase number of previews to 5\nCost: 1200 points",
+                    "Increase number of previews to 2\nCost: $_previewCost points",
+                    "Increase number of previews to 3\nCost: $_previewCost points",
+                    "Increase number of previews to 4\nCost: $_previewCost points",
+                    "Increase number of previews to 5\nCost: $_previewCost points",
                     "No more preview upgrades!"
                   ],
                   tierActions: [
@@ -78,8 +78,8 @@ class ShopScreenState extends State<ShopScreen> {
               ShopButton(
                   maxTier: 2,
                   tierTexts: [
-                    "Remove Assembly Balls\nCost: 2500 points",
-                    "Remove C++ Balls\nCost: 7500 points",
+                    "Remove Assembly Balls\nCost: $_ballRemovalCost points",
+                    "Remove C++ Balls\nCost: $_ballRemovalCost points",
                     "No more ball removal upgrades"
                   ],
                   tierActions: [
@@ -96,58 +96,62 @@ class ShopScreenState extends State<ShopScreen> {
                     }
                   ],
                   canPurchase: () {
-                    return widget.game.canPurchase(_ballRemovalCost);
+                    return widget.game.canRemoveBallType() &&
+                        widget.game.canPurchase(_ballRemovalCost);
                   }),
 
               SizedBox(height: 20),
 
+              /// Double points earned
               ShopButton(
                   maxTier: 5,
                   tierTexts: [
-                    "Double points earned from fusion\nCost: 1500 points",
-                    "Double points earned from fusion\nCost: 4000 points",
-                    "Double points earned from fusion\nCost: 10000 points",
-                    "Double points earned from fusion\nCost: 30000 points",
-                    "Double points earned from fusion\nCost: 50000 points",
+                    "Double points earned from fusion\nCost: $_scoreBooster points",
+                    "Double points earned from fusion\nCost: $_scoreBooster points",
+                    "Double points earned from fusion\nCost: $_scoreBooster points",
+                    "Double points earned from fusion\nCost: $_scoreBooster points",
+                    "Double points earned from fusion\nCost: $_scoreBooster points",
                     "No more point boosters"
                   ],
                   tierActions: [
                     () {
-                      widget.game.setScoreMultiplier(2);
+                      widget.game.upgradeScoreMultiplier();
+                      widget.game.chargePurchase(_scoreBooster);
+                      _scoreBooster = 2500;
+                      setState(() {});
+                    },
+                    () {
+                      widget.game.upgradeScoreMultiplier();
                       widget.game.chargePurchase(_scoreBooster);
                       _scoreBooster = 4000;
                       setState(() {});
                     },
                     () {
-                      widget.game.setScoreMultiplier(4);
+                      widget.game.upgradeScoreMultiplier();
                       widget.game.chargePurchase(_scoreBooster);
-                      _scoreBooster = 10000;
+                      _scoreBooster = 7500;
                       setState(() {});
                     },
                     () {
-                      widget.game.setScoreMultiplier(8);
+                      widget.game.upgradeScoreMultiplier();
                       widget.game.chargePurchase(_scoreBooster);
-                      _scoreBooster = 30000;
+                      _scoreBooster = 1000;
                       setState(() {});
                     },
                     () {
-                      widget.game.setScoreMultiplier(16);
-                      widget.game.chargePurchase(_scoreBooster);
-                      _scoreBooster = 50000;
-                      setState(() {});
-                    },
-                    () {
-                      widget.game.setScoreMultiplier(32);
+                      widget.game.upgradeScoreMultiplier();
                       widget.game.chargePurchase(_scoreBooster);
                       setState(() {});
                     },
                   ],
                   canPurchase: () {
-                    return widget.game.canPurchase(_scoreBooster);
+                    return widget.game.canUpgradeScoreMultiplier() &&
+                        widget.game.canPurchase(_scoreBooster);
                   }),
 
               SizedBox(height: 20),
 
+              /// Cheater
               ShopButton(
                   maxTier: 0,
                   tierTexts: [
