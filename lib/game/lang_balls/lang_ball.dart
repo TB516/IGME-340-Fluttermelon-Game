@@ -7,8 +7,7 @@ import 'package:fluttermelon/game/lang_balls/lang_ball_types.dart';
 final Vector2 gravity = Vector2(0, 100);
 final double rotationAmount = .1;
 
-class Langball extends SpriteComponent
-    with HasGameReference<FluttermelonGame>, HasCollisionDetection {
+class Langball extends SpriteComponent with HasGameReference<FluttermelonGame> {
   Vector2 _velocity = Vector2(0, 0);
   late final LangBallTypes _type;
   late final double _radius;
