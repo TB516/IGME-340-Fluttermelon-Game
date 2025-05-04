@@ -175,6 +175,39 @@ class ShopScreenState extends State<ShopScreen> {
                   ],
                   canPurchase: () {
                     return true;
+                  }),
+
+              SizedBox(height: 20),
+
+              ShopButton(
+                  maxTier: 0,
+                  tierTexts: ["About the App"],
+                  tierActions: [
+                    () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("About the App", style: _textStyle),
+                            content: Text(
+                              "This app is a game based on suikagame, which is a game about dropping fruits to earn points.It is also known by the name watermelon due to its knockoffs. That is why the game is called fluttermelon, as it is a flutter base watermelon game. Because of the programming theme, I also went with a dark mode for the game. The only thing to mention is that the preview goes from left to right, furthest away to closest. Thats all, enjoy the game!",
+                              style: TextStyle(fontFamily: "Helvetica"),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Close", style: _textStyle),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  ],
+                  canPurchase: () {
+                    return true;
                   })
             ],
           ),
