@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:fluttermelon/game/game.dart';
-import 'package:fluttermelon/game/shop.dart';
+import 'package:fluttermelon/game/shop_screen.dart';
 
 void main() async {
   runApp(const FluttermelonApp());
@@ -29,6 +29,7 @@ class FluttermelonHome extends StatefulWidget {
 }
 
 class _FluttermelonHomeState extends State<FluttermelonHome> {
+  final GlobalKey<ShopScreenState> shopKey = GlobalKey<ShopScreenState>();
   int curBottomTab = 0;
 
   late final FluttermelonGame _game;
@@ -47,7 +48,7 @@ class _FluttermelonHomeState extends State<FluttermelonHome> {
 
     bottomNavScreens = [
       GameWidget(game: _game),
-      Shop(game: _game),
+      ShopScreen(key: shopKey, game: _game),
     ];
   }
 
@@ -66,6 +67,7 @@ class _FluttermelonHomeState extends State<FluttermelonHome> {
             if (value == 0) {
               _game.resumeEngine();
             } else {
+              shopKey.currentState?.onVisible();
               _game.pauseEngine();
             }
           });
